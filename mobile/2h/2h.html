@@ -1,11 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <meta charset="utf-8">
-    <title>HTML5 문서 제목</title>
-    </head>
-    <body>
-        <h1>이란?</h1>
-        HyperText Markup Language의 약어
-        </body>
-        </html>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미디어 쿼리 정의</title>
+    <style>
+        
+        body {
+            background-color: #61a646; 
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        @media screen and (min-width: 600px) and (max-width: 1024px) {
+            body {
+                background-color: #dbe878; 
+                color: #333333;
+            }
+        }
+
+
+        @media screen and (min-width: 1025px) {
+            body {
+                background-color: #5d348b; 
+                color: #ffffff;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>미디어 쿼리</h1>
+    <p>반응형 웹에 대한 예</p>
+
+</body>
+</html>

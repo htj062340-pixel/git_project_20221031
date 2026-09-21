@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>황태준 - 모바일 포트폴리오</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 100%;
+            background-color: #ffffff;
+            border-radius: 0;
+            box-shadow: none;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: #ffffff;
+            padding: 20px 15px 15px 15px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 4px;
+            background-color: #1a252f;
+            padding: 4px;
+            border-radius: 8px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 8px 0;
+            background: none;
+            border: none;
+            color: #bdc3c7;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background-color: #3498db;
+            color: #ffffff;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .profile-card {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+            background-color: #fafafa;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #eaeaea;
+        }
+
+        .profile-img {
+            width: 100px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #cccccc;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-summary {
+            flex: 1;
+        }
+
+        .profile-summary h2 {
+            font-size: 1.25rem;
+            color: #2c3e50;
+            margin-bottom: 6px;
+        }
+
+        .profile-summary p {
+            font-size: 0.85rem;
+            color: #555555;
+            margin-bottom: 4px;
+        }
+
+        .intro-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #444;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 20px;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .info-table th, .info-table td {
+            padding: 10px 8px;
+            font-size: 0.85rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-table th {
+            width: 30%;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 15px;
+            border-left: 2px solid #3498db;
+            margin-top: 10px;
+        }
+
+        .timeline-item {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 4px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #3498db;
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 2px;
+        }
+
+        .timeline-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .timeline-desc {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* 아이디어 카드 스타일 */
+        .idea-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .idea-card h3 {
+            font-size: 1.05rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .idea-card p {
+            font-size: 0.85rem;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .idea-tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .idea-tag {
+            font-size: 0.75rem;
+            background-color: #eef7fc;
+            color: #3498db;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .external-links {
+            margin-top: 20px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .link-btn {
+            flex: 1;
+            text-align: center;
+            padding: 8px 0;
+            background-color: #ecf0f1;
+            color: #333;
+            text-decoration: none;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+            padding: 12px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <header>
+            <h1>황태준 홈페이지</h1>
+            <nav>
+                <button class="nav-btn active" onclick="switchPage('mintro')">자기소개</button>
+                <button class="nav-btn" onclick="switchPage('minfo')">인적사항</button>
+                <button class="nav-btn" onclick="switchPage('mstudy')">학술사항</button>
+                <button class="nav-btn" onclick="switchPage('mcareer')">경력사항</button>
+                <button class="nav-btn" onclick="switchPage('midea')">아이디어</button>
+            </nav>
+        </header>
+
+        <main>
+            <section id="mintro" class="page active">
+                <div class="profile-card">
+                    <img src="asdasd.jpg" alt="황태준 프로필 사진" class="profile-img">
+                    <div class="profile-summary">
+                        <h2>황태준</h2>
+                        <p>학번: 20221031</p>
+                        <p>전공: 컴퓨터공학전공</p>
+                    </div>
+                </div>
+
+                <div class="intro-text">
+                    안녕하세요. 풀스택 웹 및 임베디드 시스템 개발에 관심이 많은 황태준입니다.<br><br>
+                    백엔드(Java, Spring Boot)부터 프론트엔드, 그리고 임베디드(Arduino) 기반 IoT 시스템까지 다양한 분야에서 실무 감각과 문제 해결 능력을 키워가고 있습니다.
+                </div>
+
+                <div class="external-links">
+                    <a href="https://www.google.com" target="_blank" class="link-btn">Google</a>
+                    <a href="https://www.naver.com" target="_blank" class="link-btn">Naver</a>
+                </div>
+            </section>
+
+            <section id="minfo" class="page">
+                <table class="info-table">
+                    <tr>
+                        <th>성명</th>
+                        <td>황태준</td>
+                    </tr>
+                    <tr>
+                        <th>학번</th>
+                        <td>20221031</td>
+                    </tr>
+                    <tr>
+                        <th>전공</th>
+                        <td>컴퓨터공학전공</td>
+                    </tr>
+                    <tr>
+                        <th>기술 스택</th>
+                        <td>Java, Spring Boot, MyBatis, HTML5/CSS3, JavaScript, Arduino C++</td>
+                    </tr>
+                    <tr>
+                        <th>관심 분야</th>
+                        <td>웹 애플리케이션 개발, IoT 스마트 시스템</td>
+                    </tr>
+                </table>
+            </section>
+
+            <section id="mstudy" class="page">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2026</div>
+                        <div class="timeline-title">캡스톤 디자인 프로젝트</div>
+                        <div class="timeline-desc">스마트 미래 여행플래너 개발 (Gemini API 연동)</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2026</div>
+                        <div class="timeline-title">스마트 팜 프로토타입 개발</div>
+                        <div class="timeline-desc">아두이노 환경 센서 제어 및 모터 자동화 시스템 구현</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2026</div>
+                        <div class="timeline-title">웹 애플리케이션 프로젝트</div>
+                        <div class="timeline-desc">Spring MVC 기반 비즈니스 카드 및 도서 관리 시스템 구축</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="mcareer" class="page">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2026</div>
+                        <div class="timeline-title">웹 개발 프로젝트 팀 리더</div>
+                        <div class="timeline-desc">와이어프레임 설계 및 웹 인터페이스 구조화 총괄</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2025 - Present</div>
+                        <div class="timeline-title">데이터 분석 및 알고리즘 학습</div>
+                        <div class="timeline-desc">Kaggle 머신러닝/데이터 분석 활동</div>
+                    </div>
+                </div>
+            </section>
+
+    
+            <section id="midea" class="page">
+                <div class="idea-card">
+                    <h3>🎬 영화 데이터 통합 및 흥행 예측 플랫폼</h3>
+                    <p>실시간 영화 데이터(상영작, 평점, 기본 정보) 흥행 예측</p>
+                    <div class="idea-tag-container">
+                 
+                    </div>
+                </div>
+
+                <div class="idea-card">
+                    <h3>🪑 사용자 맞춤형 영화관 좌석 추천 서비스</h3>
+                    <p>상영관별 스크린 크기, 사운드 존, 관람객의 시야 취향(중앙/측면/상단)을 분석하여 최적의 좌석 추천</p>
+                    <div class="idea-tag-container">
+             
+                    </div>
+                </div>
+
+                <div class="idea-card">
+                    <h3>⭐ 커스텀 영화 정보 & 즐겨찾기 포털</h3>
+                    <div class="idea-tag-container">
+                
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            Copyright © 2026 Hwang Taejun. All Rights Reserved.
+        </footer>
+    </div>
+
+    <script>
+        function switchPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(pageId).classList.add('active');
+
+            const pageIndex = ['mintro', 'minfo', 'mstudy', 'mcareer', 'midea'].indexOf(pageId);
+            if (pageIndex !== -1) {
+                buttons[pageIndex].classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

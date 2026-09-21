@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J-Cinema Hub v3</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #ff3e3e;
+            --bg: #0a0a0a;
+            --surface: #1a1a1a;
+            --surface-hover: #252525;
+            --text: #eeeeee;
+            --text-muted: #aaaaaa;
+            --ease: cubic-bezier(0.23, 1, 0.32, 1);
+            --star-color: #ffc107;
+            --cgv-red: #fb4357;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        nav {
+            position: fixed; top: 0; width: 100%;
+            padding: 25px 5%; display: flex;
+            justify-content: space-between; align-items: center;
+            background: transparent; z-index: 1000;
+            transition: 0.4s var(--ease);
+        }
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 15px 5%;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+        .logo { 
+            font-family: 'Playfair Display', serif; font-size: 1.8rem; 
+            letter-spacing: -1px; color: var(--text); text-decoration: none;
+        }
+        .logo span { color: var(--accent); }
+
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { 
+            color: var(--text); text-decoration: none; font-size: 0.95rem; 
+            font-weight: 300; opacity: 0.7; transition: 0.3s;
+        }
+        .nav-links a:hover { opacity: 1; color: white; }
+
+        header {
+            height: 70vh; display: flex; align-items: center;
+            padding: 0 10%;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, var(--bg) 100%), 
+                        url('https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&q=80&w=2070');
+            background-size: cover; background-position: center;
+        }
+        .hero-text h1 { 
+            font-size: 4rem; font-family: 'Playfair Display', serif; 
+            margin-bottom: 15px; line-height: 1.1;
+        }
+        .hero-text p { color: var(--text-muted); font-size: 1.2rem; }
+
+        section { padding: 80px 10% 60px; }
+        .section-header { margin-bottom: 50px; text-align: center; }
+        .section-header h2 { 
+            font-size: 2.3rem; font-family: 'Playfair Display', serif;
+            position: relative; display: inline-block; padding-bottom: 15px;
+        }
+        .section-header h2::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 60px; height: 3px; background: var(--accent);
+        }
+
+        .controls-bar {
+            background: var(--surface); padding: 20px 30px;
+            border-radius: 15px; margin-bottom: 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            gap: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); flex-wrap: wrap;
+        }
+        .search-box { position: relative; flex: 1; min-width: 200px; max-width: 300px; }
+        .search-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .search-box input {
+            width: 100%; padding: 12px 15px 12px 45px;
+            background: #2a2a2a; border: 1px solid #333;
+            color: white; border-radius: 30px; font-size: 0.9rem;
+        }
+
+        .movie-filters { display: flex; gap: 10px; flex-wrap: wrap; }
+        .filter-btn {
+            background: #2a2a2a; color: var(--text-muted); border: none;
+            padding: 10px 20px; border-radius: 30px; cursor: pointer;
+            font-size: 0.85rem; font-weight: 700; transition: 0.3s;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .filter-btn.active { background: var(--accent); color: white; }
+        .filter-btn.favorite-filter.active { background: var(--star-color); color: #000; }
+
+        .movie-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 30px; min-height: 400px;
+        }
+        .movie-card {
+            background: var(--surface); border-radius: 15px;
+            overflow: hidden; cursor: pointer; position: relative;
+            transition: 0.4s var(--ease); border: 1px solid #2a2a2a;
+            display: flex; flex-direction: column;
+        }
+        .movie-card:hover { transform: translateY(-10px); border-color: #444; }
+
+        .predict-badge {
+            position: absolute; top: 15px; left: 15px;
+            background: rgba(255, 62, 62, 0.9); color: white;
+            padding: 5px 12px; border-radius: 20px; font-size: 0.75rem;
+            font-weight: 700; z-index: 10; backdrop-filter: blur(5px);
+        }
+
+        .bookmark-btn {
+            position: absolute; top: 15px; right: 15px;
+            width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6); color: #ffffff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.1rem; z-index: 10; backdrop-filter: blur(5px);
+            transition: 0.3s; border: none; cursor: pointer;
+        }
+        .bookmark-btn:hover { transform: scale(1.15); }
+        .bookmark-btn.active { color: var(--star-color); background: rgba(0, 0, 0, 0.8); }
+
+        .poster-wrapper { position: relative; height: 350px; overflow: hidden; }
+        .poster { width: 100%; height: 100%; background-size: cover; background-position: center; }
+
+        .info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .info h4 { font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 5px; }
+        .info .meta { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; }
+        
+        .my-review-tag {
+            background: rgba(255, 193, 7, 0.15); color: var(--star-color);
+            padding: 5px 10px; border-radius: 8px; font-size: 0.8rem; margin-top: 10px;
+        }
+
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center;
+            padding: 20px; backdrop-filter: blur(10px); opacity: 0; transition: opacity 0.3s;
+        }
+        .modal.open { display: flex; opacity: 1; }
+        
+        .modal-content {
+            background: var(--surface); border-radius: 20px; width: 100%;
+            max-width: 900px; max-height: 90vh; overflow-y: auto;
+            position: relative; border: 1px solid #333; padding: 30px;
+            display: flex; gap: 30px;
+        }
+        .close-modal { 
+            position: absolute; top: 20px; right: 20px; font-size: 1.5rem;
+            cursor: pointer; color: var(--text-muted); z-index: 100;
+        }
+
+        .modal-left { width: 300px; flex-shrink: 0; }
+        .modal-left img { width: 100%; border-radius: 12px; }
+
+        .modal-right { flex-grow: 1; display: flex; flex-direction: column; gap: 20px; }
+        
+        .seat-recommend-box {
+            background: #231f20; border: 1px solid var(--cgv-red);
+            border-radius: 12px; padding: 20px; color: white;
+        }
+        .seat-recommend-box h5 { color: var(--cgv-red); font-size: 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .seat-recommend-box p { font-size: 0.9rem; color: #ccc; }
+        .seat-tag {
+            display: inline-block; background: var(--cgv-red); color: white;
+            padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 0.8rem; margin-right: 5px;
+        }
+
+        .review-box {
+            background: #252525; padding: 20px; border-radius: 12px; border: 1px solid #333;
+        }
+        .review-box h5 { margin-bottom: 10px; font-size: 1rem; }
+        .star-rating { display: flex; gap: 5px; color: var(--star-color); margin-bottom: 10px; cursor: pointer; font-size: 1.3rem; }
+        .review-input {
+            width: 100%; background: #1a1a1a; border: 1px solid #444; color: white;
+            padding: 10px; border-radius: 8px; resize: none; height: 60px; margin-bottom: 10px;
+        }
+        .save-btn {
+            background: var(--accent); color: white; border: none; padding: 8px 20px;
+            border-radius: 6px; font-weight: bold; cursor: pointer; float: right;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content { flex-direction: column; }
+            .modal-left { width: 100%; text-align: center; }
+            .modal-left img { max-width: 200px; }
+        }
+    </style>
+</head>
+<body onload="initApp()">
+
+    <nav id="navbar">
+        <a href="#" class="logo">J<span>Cinema</span></a>
+        <div class="nav-links">
+            <a href="#home">홈</a>
+            <a href="#movies">개봉 및 추천작</a>
+        </div>
+    </nav>
+
+    <header id="home">
+        <div class="hero-text">
+            <h1>Movie & Seat Guide</h1>
+            <p>실시간 개봉작 탐색, 흥행 예측부터 CGV 상영관별 최적의 명당자리 추천까지</p>
+        </div>
+    </header>
+
+    <section id="movies">
+        <div class="section-header">
+            <h2>실시간 영화 라인업</h2>
+        </div>
+
+        <div class="controls-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="movie-search" placeholder="영화 제목 검색..." onkeyup="searchMovies()">
+            </div>
+            <div class="movie-filters">
+                <button class="filter-btn active" onclick="fetchMovies('upcoming', this)">개봉 예정작</button>
+                <button class="filter-btn" onclick="fetchMovies('now_playing', this)">현재 상영작</button>
+                <button class="filter-btn" onclick="fetchMovies('popular', this)">인기작</button>
+                <button class="filter-btn favorite-filter" onclick="showFavorites(this)"><i class="fas fa-star"></i> 즐겨찾기</button>
+            </div>
+        </div>
+
+        <div class="movie-grid" id="movie-grid">
+            <div style="color: var(--text-muted); text-align: center; grid-column: 1/-1; padding: 50px;">영화를 불러오는 중...</div>
+        </div>
+    </section>
+
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            
+            <div class="modal-left">
+                <img id="modalPoster" src="" alt="Poster">
+            </div>
+            
+            <div class="modal-right">
+                <div>
+                    <h2 id="modalTitle" style="font-size: 2rem; margin-bottom: 5px;">영화 제목</h2>
+                    <p id="modalMeta" style="color: var(--text-muted); font-size: 0.9rem;">개봉일 | 장르</p>
+                </div>
+
+                <p id="modalDesc" style="color: #ccc; font-size: 0.95rem; line-height: 1.5;">줄거리 내용...</p>
+
+                <div class="seat-recommend-box">
+                    <h5><i class="fas fa-couch"></i> CGV 추천 관형 & 명당 좌석</h5>
+                    <p style="margin-bottom: 5px;"><span class="seat-tag" id="recFormat">IMAX</span> <strong id="recSeat">H~J열 중앙</strong></p>
+                    <p id="recTip" style="font-size: 0.85rem; color: #aaa;">좌석 추천 팁 설명</p>
+                </div>
+
+                <div class="review-box">
+                    <h5><i class="fas fa-pen"></i> 내 관람평 & 평점 남기기</h5>
+                    <div class="star-rating" id="starInput">
+                        <i class="far fa-star" onclick="setStar(1)"></i>
+                        <i class="far fa-star" onclick="setStar(2)"></i>
+                        <i class="far fa-star" onclick="setStar(3)"></i>
+                        <i class="far fa-star" onclick="setStar(4)"></i>
+                        <i class="far fa-star" onclick="setStar(5)"></i>
+                    </div>
+                    <textarea id="commentInput" class="review-input" placeholder="영화에 대한 한줄평을 남겨주세요..."></textarea>
+                    <button class="save-btn" onclick="saveReview()">저장하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        const TMDB_API_KEY = 'YOUR_TMDB_API_KEY';
+        const BASE_URL = 'https://api.themoviedb.org/3';
+        const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+
+        let currentMovies = [];
+        let selectedMovieId = null;
+        let currentSelectedRating = 0;
+        let currentFilterMode = 'upcoming';
+
+        let myReviews = JSON.parse(localStorage.getItem('jcinema_reviews')) || {};
+        let myFavorites = JSON.parse(localStorage.getItem('jcinema_favorites')) || [];
+
+        function initApp() {
+            AOS.init({ duration: 800, once: true });
+            fetchMovies('upcoming');
+        }
+
+        async function fetchMovies(type = 'upcoming', btnElem = null) {
+            currentFilterMode = type;
+            if (btnElem) {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btnElem.classList.add('active');
+            }
+
+            const grid = document.getElementById('movie-grid');
+            grid.innerHTML = '<div style="color: var(--text-muted); text-align: center; grid-column: 1/-1; padding: 50px;">영화를 불러오는 중...</div>';
+
+            if (!TMDB_API_KEY || TMDB_API_KEY === 'YOUR_TMDB_API_KEY') {
+                setTimeout(() => renderDemoMovies(), 500);
+                return;
+            }
+
+            try {
+                const res1 = await fetch(`${BASE_URL}/movie/${type}?api_key=${TMDB_API_KEY}&language=ko-KR&region=KR&page=1`);
+                const data1 = await res1.json();
+                
+                const res2 = await fetch(`${BASE_URL}/movie/${type}?api_key=${TMDB_API_KEY}&language=ko-KR&region=KR&page=2`);
+                const data2 = await res2.json();
+
+                const combinedResults = [...(data1.results || []), ...(data2.results || [])];
+                currentMovies = combinedResults.map(m => processMovieData(m));
+                renderMovieGrid(currentMovies);
+            } catch (err) {
+                console.error(err);
+                renderDemoMovies();
+            }
+        }
+
+        function showFavorites(btnElem) {
+            currentFilterMode = 'favorites';
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btnElem.classList.add('active');
+
+            const favoritedMovies = currentMovies.filter(m => myFavorites.includes(m.id));
+            renderMovieGrid(favoritedMovies);
+        }
+
+        function toggleFavorite(event, movieId) {
+            event.stopPropagation();
+            const index = myFavorites.indexOf(movieId);
+            
+            if (index > -1) {
+                myFavorites.splice(index, 1);
+            } else {
+                myFavorites.push(movieId);
+            }
+
+            localStorage.setItem('jcinema_favorites', JSON.stringify(myFavorites));
+
+            if (currentFilterMode === 'favorites') {
+                const favoritedMovies = currentMovies.filter(m => myFavorites.includes(m.id));
+                renderMovieGrid(favoritedMovies);
+            } else {
+                const searchVal = document.getElementById('movie-search').value.toLowerCase();
+                if (searchVal) {
+                    searchMovies();
+                } else {
+                    renderMovieGrid(currentMovies);
+                }
+            }
+        }
+
+        function processMovieData(movie) {
+            const predictScore = Math.min(Math.round((movie.popularity || 50) / 5) + 50, 99);
+            const seatInfo = getSeatRecommendation(movie.title, movie.genre_ids || []);
+
+            return {
+                id: movie.id,
+                title: movie.title,
+                releaseDate: movie.release_date || '개봉 예정',
+                overview: movie.overview || '상세 줄거리가 등록되지 않았습니다.',
+                poster: movie.poster_path ? `${IMAGE_BASE_URL}${movie.poster_path}` : 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&q=80&w=500',
+                predictScore: predictScore,
+                recommendation: seatInfo
+            };
+        }
+
+        function getSeatRecommendation(title, genreIds) {
+            const name = title.toLowerCase();
+
+            if (genreIds.includes(10402) || name.includes('콘서트') || name.includes('라이브') || name.includes('뮤직')) {
+                return {
+                    format: "SOUNDX / 일반관",
+                    seat: "중앙 E~H열 (사운드 밸런스 구역)",
+                    tip: "음향 전파각상 스피커 소리가 가장 조화롭게 합쳐지는 중앙 열을 추천합니다."
+                };
+            } else if (genreIds.includes(878) || name.includes('아바타') || name.includes('오디세이') || name.includes('인터스텔라') || name.includes('우주')) {
+                return {
+                    format: "IMAX 3D / GT관",
+                    seat: "시야를 가득 채우는 F~I열 중앙",
+                    tip: "화면이 시야각을 가득 채워 압도적인 몰입감을 제공하는 명당입니다."
+                };
+            } else if (genreIds.includes(28) || name.includes('스파이더맨') || name.includes('마블') || name.includes('히어로') || name.includes('액션')) {
+                return {
+                    format: "ScreenX / ULTRA 4DX",
+                    seat: "3면 시야 확보를 위한 H~K열 뒤쪽",
+                    tip: "양옆 확장 스크린을 넓게 감상하기 위해 평소보다 2~3열 뒤쪽 시야를 권장합니다."
+                };
+            } else if (genreIds.includes(16) || name.includes('애니') || name.includes('극장판')) {
+                return {
+                    format: "4DX / 일반 2D관",
+                    seat: "화면 중앙 G~I열",
+                    tip: "색감 표현이 생생하고 자막과 화면을 동시에 편안하게 볼 수 있는 중앙 석입니다."
+                };
+            } else {
+                return {
+                    format: "일반 2D관",
+                    seat: "편안한 시선 수평 H~J열",
+                    tip: "고개를 들지 않고 편안하게 시선이 수평 유지되는 가장 안정적인 로얄석입니다."
+                };
+            }
+        }
+
+        function renderMovieGrid(movies) {
+            const grid = document.getElementById('movie-grid');
+            grid.innerHTML = '';
+
+            if (!movies || movies.length === 0) {
+                const emptyMsg = currentFilterMode === 'favorites' 
+                    ? '즐겨찾기한 영화가 없습니다.<br>영화 카드의 별 아이콘을 눌러 추가해보세요!' 
+                    : '해당하는 영화가 없습니다.';
+                grid.innerHTML = `<div style="color: var(--text-muted); text-align: center; grid-column: 1/-1; padding: 50px; line-height: 1.8;">${emptyMsg}</div>`;
+                return;
+            }
+
+            movies.forEach(movie => {
+                const userReview = myReviews[movie.id];
+                const isFav = myFavorites.includes(movie.id);
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.onclick = () => openModal(movie.id);
+
+                card.innerHTML = `
+                    <div class="predict-badge"><i class="fas fa-fire"></i> 흥행예측 ${movie.predictScore}%</div>
+                    <button class="bookmark-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, ${movie.id})">
+                        <i class="${isFav ? 'fas' : 'far'} fa-star"></i>
+                    </button>
+                    <div class="poster-wrapper">
+                        <div class="poster" style="background-image: url('${movie.poster}')"></div>
+                    </div>
+                    <div class="info">
+                        <div>
+                            <h4>${movie.title}</h4>
+                            <p class="meta">${movie.releaseDate}</p>
+                        </div>
+                        ${userReview ? `<div class="my-review-tag"><i class="fas fa-star"></i> 내 평점 ${userReview.rating}점: "${userReview.comment}"</div>` : ''}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openModal(id) {
+            selectedMovieId = id;
+            const movie = currentMovies.find(m => m.id === id);
+            if (!movie) return;
+
+            document.getElementById('modalTitle').innerText = movie.title;
+            document.getElementById('modalMeta').innerText = `개봉일: ${movie.releaseDate}`;
+            document.getElementById('modalDesc').innerText = movie.overview;
+            document.getElementById('modalPoster').src = movie.poster;
+
+            document.getElementById('recFormat').innerText = movie.recommendation.format;
+            document.getElementById('recSeat').innerText = movie.recommendation.seat;
+            document.getElementById('recTip').innerText = movie.recommendation.tip;
+
+            const review = myReviews[id];
+            if (review) {
+                setStar(review.rating);
+                document.getElementById('commentInput').value = review.comment;
+            } else {
+                setStar(0);
+                document.getElementById('commentInput').value = '';
+            }
+
+            const modal = document.getElementById('detailModal');
+            modal.classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').classList.remove('open');
+        }
+
+        function setStar(rating) {
+            currentSelectedRating = rating;
+            const stars = document.querySelectorAll('#starInput i');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.className = 'fas fa-star';
+                } else {
+                    star.className = 'far fa-star';
+                }
+            });
+        }
+
+        function saveReview() {
+            if (!selectedMovieId) return;
+            const comment = document.getElementById('commentInput').value.trim();
+
+            if (currentSelectedRating === 0) {
+                alert('별점을 선택해 주세요!');
+                return;
+            }
+
+            myReviews[selectedMovieId] = {
+                rating: currentSelectedRating,
+                comment: comment
+            };
+
+            localStorage.setItem('jcinema_reviews', JSON.stringify(myReviews));
+            alert('내 관람평이 성공적으로 저장되었습니다!');
+            closeModal();
+            
+            if (currentFilterMode === 'favorites') {
+                const favoritedMovies = currentMovies.filter(m => myFavorites.includes(m.id));
+                renderMovieGrid(favoritedMovies);
+            } else {
+                renderMovieGrid(currentMovies);
+            }
+        }
+
+        function searchMovies() {
+            const query = document.getElementById('movie-search').value.toLowerCase();
+            let baseList = currentMovies;
+            if (currentFilterMode === 'favorites') {
+                baseList = currentMovies.filter(m => myFavorites.includes(m.id));
+            }
+            const filtered = baseList.filter(m => m.title.toLowerCase().includes(query));
+            renderMovieGrid(filtered);
+        }
+
+        function renderDemoMovies() {
+            currentMovies = [
+                {
+                    id: 101, title: "오디세이 (IMAX 대작)", releaseDate: "2026-05-15",
+                    overview: "우주 저편의 새로운 행성을 찾기 위해 떠난 탐사대의 장대한 여정을 그린 SF 블록버스터.",
+                    poster: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=500",
+                    predictScore: 95,
+                    recommendation: getSeatRecommendation("오디세이", [878])
+                },
+                {
+                    id: 102, title: "스파이더맨: 스크린X 에디션", releaseDate: "2026-06-01",
+                    overview: "3면 스크린을 통해 펼쳐지는 한 차원 높은 도심 웹스윙 액션.",
+                    poster: "https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&q=80&w=500",
+                    predictScore: 92,
+                    recommendation: getSeatRecommendation("스파이더맨", [28])
+                },
+                {
+                    id: 103, title: "월드 투어 라이브 콘서트", releaseDate: "2026-05-20",
+                    overview: "전 세계를 매료시킨 감동의 월드투어 실황을 극장의 입체적 SoundX 사운드로 감상한다.",
+                    poster: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80&w=500",
+                    predictScore: 88,
+                    recommendation: getSeatRecommendation("콘서트", [10402])
+                },
+                {
+                    id: 104, title: "사이퍼: 침묵의 다이빙", releaseDate: "2026-06-10",
+                    overview: "심해 3,000m에서 일어난 의문의 사고와 인류 최후의 비밀 프로젝트를 다룬 해양 스릴러.",
+                    poster: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=500",
+                    predictScore: 84,
+                    recommendation: getSeatRecommendation("사이퍼", [28])
+                },
+                {
+                    id: 105, title: "네온 시티 러너", releaseDate: "2026-06-18",
+                    overview: "2099년 미래도시의 어둠 속에서 펼쳐지는 화려한 시버펑크 레이싱 애니메이션.",
+                    poster: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&q=80&w=500",
+                    predictScore: 90,
+                    recommendation: getSeatRecommendation("네온 시티", [16])
+                },
+                {
+                    id: 106, title: "라스트 재즈 하모니", releaseDate: "2026-07-02",
+                    overview: "뉴욕의 한 오래된 재즈 클럽에서 펼쳐지는 두 음악가의 운명적인 만남과 사랑.",
+                    poster: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&q=80&w=500",
+                    predictScore: 81,
+                    recommendation: getSeatRecommendation("라스트 재즈", [10402])
+                },
+                {
+                    id: 107, title: "샤도우 헌터: 시작", releaseDate: "2026-07-15",
+                    overview: "밤을 지배하는 고대 크리처들과 그들을 쫓는 비밀 조직의 숨막히는 혈전.",
+                    poster: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=500",
+                    predictScore: 87,
+                    recommendation: getSeatRecommendation("샤도우 헌터", [28])
+                },
+                {
+                    id: 108, title: "시간의 정원사", releaseDate: "2026-08-01",
+                    overview: "시간을 가꾸는 정원이라는 판타지 세계관을 배경으로 한 감성적인 드라마.",
+                    poster: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=500",
+                    predictScore: 83,
+                    recommendation: getSeatRecommendation("시간의 정원사", [])
+                },
+                {
+                    id: 109, title: "갤럭시 원정대", releaseDate: "2026-08-12",
+                    overview: "은하계를 수호하기 위해 뭉친 오합지졸 영웅들의 좌충우돌 스페이스 코미디.",
+                    poster: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=500",
+                    predictScore: 91,
+                    recommendation: getSeatRecommendation("갤럭시 원정대", [878, 28])
+                },
+                {
+                    id: 110, title: "포레스트 히어로즈", releaseDate: "2026-08-25",
+                    overview: "위기에 처한 숲속 마을을 구하기 위해 작은 동물 친구들이 펼치는 위대한 모험.",
+                    poster: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=500",
+                    predictScore: 86,
+                    recommendation: getSeatRecommendation("포레스트 히어로즈", [16])
+                },
+                {
+                    id: 111, title: "알파코드: AI 인류", releaseDate: "2026-09-05",
+                    overview: "자아를 가진 최초의 인공지능과 인류 간의 공존과 갈등을 그린 디스토피아 SF.",
+                    poster: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80&w=500",
+                    predictScore: 89,
+                    recommendation: getSeatRecommendation("알파코드", [878])
+                },
+                {
+                    id: 112, title: "미드나잇 다이닝", releaseDate: "2026-09-18",
+                    overview: "심야 식당에서 펼쳐지는 특별한 요리와 손님들의 따뜻한 인생 이야기.",
+                    poster: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=500",
+                    predictScore: 79,
+                    recommendation: getSeatRecommendation("미드나잇 다이닝", [])
+                }
+            ];
+            
+            if (currentFilterMode === 'favorites') {
+                const favoritedMovies = currentMovies.filter(m => myFavorites.includes(m.id));
+                renderMovieGrid(favoritedMovies);
+            } else {
+                renderMovieGrid(currentMovies);
+            }
+        }
+    </script>
+</body>
+</html>
