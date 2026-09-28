@@ -2,107 +2,55 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>시맨틱 태그 적용 웹</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미디어 쿼리 정의</title>
     <style>
+        /* 기본 스타일 (모바일 / 가장 작은 화면) */
         body {
-            margin: 20px;
-        }
-
-        header, nav, section, article, aside, footer {
-            border: 1px solid gray;
-            padding: 10px;
-        }
-
-        header {
-            background-color: #333333;
-            color: white;
-            height: 40px;
-        }
-
-        nav {
-            background-color: #669933;
-            color: white;
-            height: 25px;
-        }
-
-        .container {
+            background-color: #61a646; /* 진한 연두색/초록색 */
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
             display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease;
         }
 
-        section {
-            background-color: #d9f0d0;
-            width: 75%;
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
         }
 
-        aside {
-            background-color: #eeeeee;
-            width: 25%;
+        p {
+            font-size: 1.2rem;
+            margin: 0;
         }
 
-        article {
-            background-color: #8fa9c4;
-            margin-top: 10px;
+        /* 중간 화면 (태블릿 크기) - 배경색 노란색/연두색으로 변경 */
+        @media screen and (min-width: 600px) and (max-width: 1024px) {
+            body {
+                background-color: #dbe878; /* 연한 노란빛 연두색 */
+                color: #333333;
+            }
         }
 
-        footer {
-            background-color: #333333;
-            color: white;
-            height: 25px;
+        /* 큰 화면 (데스크톱 크기) - 배경색 보라색으로 변경 */
+        @media screen and (min-width: 1025px) {
+            body {
+                background-color: #5d348b; /* 보라색 */
+                color: #ffffff;
+            }
         }
     </style>
 </head>
-
 <body>
 
-    <header>
-        Header 영역
-    </header>
-
-    <nav>
-        Nav 영역
-    </nav>
-
-    <div class="container">
-
-        <section>
-            <h3>Section1 영역</h3>
-
-            <p>
-                section 태그는 문서에서 하나의 제목을 중심으로
-                내용을 그룹화하기 위해 사용한다. 하나의 세ㅐㄱ션은 하나의 주제를 가지며 보통 h1~6태그 중 하나만을 사용하는 것이 좋다. 하나의 주제 안에 또 다른 세부주제가 있다면 섹션 안에 다른 센션이 포함될수있다.
-            </p>
-
-            <h3>Section2 영역</h3>
-
-            <p>
-                내용 구성에 따라 section 태그 안에 article 태그를
-                포함시킬 수도 있다.
-            </p>
-
-            <article>
-                <h3>Article 영역</h3>
-                <p>
-                    article 태그는 독립적으로 사용할 수 있는
-                    하나의 콘텐츠를 나타낸다.개별적으로 사용이 가능한 독립적인 내용으로 작성 된다. 별도로 배보푀거나 재사용될 수 있는 내용이 해당된다. 예를들면, 블로그나 잡지의 기사, 포스트, 스토리처럼 하나의 독립적인 내용 영역이 해당된다.
-                </p>
-            </article>
-        </section>
-
-        <aside>
-            <h3>Aside 영역</h3>
-
-            <p>
-                aside 태그는 본문 영역과 관련된 부가적인
-                내용을 나타낼 때 사용한다.
-            </p>
-        </aside>
-
-    </div>
-
-    <footer>
-        Footer 영역
-    </footer>
+    <h1>미디어 쿼리</h1>
+    <p>반응형 웹에 대한 예</p>
 
 </body>
 </html>
