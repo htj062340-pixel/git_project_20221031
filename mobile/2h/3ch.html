@@ -44,6 +44,29 @@
             letter-spacing: -0.5px;
         }
 
+        .bgm-container {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bgm-btn {
+            background-color: #34495e;
+            color: #ffffff;
+            border: 1px solid #5d6d7e;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .bgm-btn:hover {
+            background-color: #3498db;
+        }
+
         nav {
             display: flex;
             justify-content: space-between;
@@ -191,7 +214,6 @@
             color: #666;
         }
 
-        /* 아이디어 카드 스타일 */
         .idea-card {
             background-color: #ffffff;
             border: 1px solid #e0e0e0;
@@ -217,29 +239,15 @@
             margin-bottom: 10px;
         }
 
-        .idea-tag-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .idea-tag {
-            font-size: 0.75rem;
-            background-color: #eef7fc;
-            color: #3498db;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-
         .external-links {
             margin-top: 20px;
             display: flex;
+            flex-wrap: wrap;
             gap: 8px;
         }
 
         .link-btn {
-            flex: 1;
+            flex: 1 1 45%;
             text-align: center;
             padding: 8px 0;
             background-color: #ecf0f1;
@@ -264,6 +272,13 @@
     <div class="mobile-container">
         <header>
             <h1>황태준 홈페이지</h1>
+            
+            <!-- 외부 무료 샘플 음원(잔잔한 피아노/클래식) 직접 연결 -->
+            <audio id="bgm" src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" loop></audio>
+            <div class="bgm-container">
+                <button id="bgmBtn" class="bgm-btn" onclick="toggleBGM()">🎵 BGM 재생</button>
+            </div>
+
             <nav>
                 <button class="nav-btn active" onclick="switchPage('mintro')">자기소개</button>
                 <button class="nav-btn" onclick="switchPage('minfo')">인적사항</button>
@@ -292,6 +307,8 @@
                 <div class="external-links">
                     <a href="https://www.google.com" target="_blank" class="link-btn">Google</a>
                     <a href="https://www.naver.com" target="_blank" class="link-btn">Naver</a>
+                    <a href="http://maps.google.com/maps?q=37.511611,127.098293&hl=ko" target="_blank" class="link-btn">맵(위성좌표)</a>
+                    <a href="http://maps.google.com/maps?q=대한민국+서울특별시+강남구+삼성1동+159-1&hl=ko" target="_blank" class="link-btn">맵(주소)</a>
                 </div>
             </section>
 
@@ -355,29 +372,19 @@
                 </div>
             </section>
 
-    
             <section id="midea" class="page">
                 <div class="idea-card">
                     <h3>🎬 영화 데이터 통합 및 흥행 예측 플랫폼</h3>
                     <p>실시간 영화 데이터(상영작, 평점, 기본 정보) 흥행 예측</p>
-                    <div class="idea-tag-container">
-                 
-                    </div>
                 </div>
 
                 <div class="idea-card">
                     <h3>🪑 사용자 맞춤형 영화관 좌석 추천 서비스</h3>
                     <p>상영관별 스크린 크기, 사운드 존, 관람객의 시야 취향(중앙/측면/상단)을 분석하여 최적의 좌석 추천</p>
-                    <div class="idea-tag-container">
-             
-                    </div>
                 </div>
 
                 <div class="idea-card">
                     <h3>⭐ 커스텀 영화 정보 & 즐겨찾기 포털</h3>
-                    <div class="idea-tag-container">
-                
-                    </div>
                 </div>
             </section>
         </main>
@@ -400,6 +407,19 @@
             const pageIndex = ['mintro', 'minfo', 'mstudy', 'mcareer', 'midea'].indexOf(pageId);
             if (pageIndex !== -1) {
                 buttons[pageIndex].classList.add('active');
+            }
+        }
+
+        function toggleBGM() {
+            const audio = document.getElementById('bgm');
+            const btn = document.getElementById('bgmBtn');
+
+            if (audio.paused) {
+                audio.play();
+                btn.textContent = '⏸ BGM 일시정지';
+            } else {
+                audio.pause();
+                btn.textContent = '🎵 BGM 재생';
             }
         }
     </script>
