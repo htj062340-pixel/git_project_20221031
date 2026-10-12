@@ -166,8 +166,8 @@
             transform: translateY(-5px); border-color: var(--accent);
             background: var(--surface-hover);
         }
-        .ref-card h3 { font-size: 1.2rem; color: white; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
-        .ref-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.4; }
+        .ref-card h3 { font-size: 1.2rem; color: white; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .ref-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.4; word-break: break-all; }
 
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -270,7 +270,7 @@
         <div class="nav-links">
             <a href="#home">홈</a>
             <a href="#movies">개봉 및 추천작</a>
-            <a href="#references">참고 사이트</a>
+            <a href="#references">참고 및 개발자 정보</a>
             <a href="https://maps.google.com/?q=CGV" target="_blank">영화관 지도</a>
         </div>
     </nav>
@@ -308,7 +308,7 @@
 
     <section id="references">
         <div class="section-header">
-            <h2>참고할 만한 사이트</h2>
+            <h2>참고 사이트 & Contact</h2>
         </div>
         <div class="ref-site-grid">
             <a href="https://pedia.watcha.com/" target="_blank" class="ref-card">
@@ -322,6 +322,18 @@
             <a href="https://letterboxd.com/" target="_blank" class="ref-card">
                 <h3>Letterboxd <i class="fas fa-external-link-alt"></i></h3>
                 <p>Social film discovery.</p>
+            </a>
+            <a href="mailto:htj062340@gmail.com" class="ref-card">
+                <h3>Contact Email <i class="fas fa-envelope" style="color: #ff3e3e;"></i></h3>
+                <p>htj062340@gmail.com</p>
+            </a>
+            <a href="https://www.instagram.com/내_인스타그램_아이디" target="_blank" class="ref-card">
+                <h3>Instagram <i class="fab fa-instagram" style="color: #e4405f;"></i></h3>
+                <p>내 인스타그램 프로필 바로가기</p>
+            </a>
+            <a href="https://www.facebook.com/내_페이스북_아이디" target="_blank" class="ref-card">
+                <h3>Facebook <i class="fab fa-facebook-f" style="color: #1877f2;"></i></h3>
+                <p>내 페이스북 프로필 바로가기</p>
             </a>
         </div>
     </section>

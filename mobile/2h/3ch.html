@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>황태준 - 모바일 포트폴리오</title>
+    <title>황태준 - 포트폴리오</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
     <style>
         * {
             box-sizing: border-box;
@@ -13,21 +14,25 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #ffffff;
+            background-color: #f4f6f8;
             color: #333;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
         .mobile-container {
             width: 100%;
-            max-width: 100%;
+            max-width: 750px;
             background-color: #ffffff;
-            border-radius: 0;
-            box-shadow: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            min-height: 85vh;
         }
 
         header {
@@ -49,14 +54,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
         }
 
         .bgm-btn {
             background-color: #34495e;
             color: #ffffff;
             border: 1px solid #5d6d7e;
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.8rem;
             cursor: pointer;
@@ -74,10 +78,16 @@
             background-color: #1a252f;
             padding: 4px;
             border-radius: 8px;
+            position: relative;
+        }
+
+        .nav-item {
+            flex: 1;
+            position: relative;
         }
 
         .nav-btn {
-            flex: 1;
+            width: 100%;
             padding: 8px 0;
             background: none;
             border: none;
@@ -89,14 +99,54 @@
             transition: all 0.2s ease;
         }
 
-        .nav-btn.active, .nav-btn:hover {
+        .nav-item:hover .nav-btn, .nav-btn.active {
             background-color: #3498db;
             color: #ffffff;
         }
 
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border-radius: 0 0 6px 6px;
+            overflow: hidden;
+            z-index: 100;
+            text-align: left;
+            margin-top: 4px;
+        }
+
+        .nav-item:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 8px 10px;
+            font-size: 0.75rem;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #f1f1f1;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: #ebf5fb;
+            color: #2980b9;
+        }
+
         main {
             flex: 1;
-            padding: 20px;
+            padding: 25px;
+            overflow-y: auto;
         }
 
         .page {
@@ -113,7 +163,7 @@
             margin-bottom: 20px;
             align-items: center;
             background-color: #fafafa;
-            padding: 12px;
+            padding: 15px;
             border-radius: 10px;
             border: 1px solid #eaeaea;
         }
@@ -152,6 +202,27 @@
             border-radius: 8px;
             border-left: 4px solid #3498db;
             margin-bottom: 20px;
+        }
+
+        .tab-sub-list {
+            margin-top: 15px;
+            background: #f1f8ff;
+            border: 1px solid #cce5ff;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .tab-sub-list h4 {
+            font-size: 0.85rem;
+            color: #004085;
+            margin-bottom: 8px;
+        }
+
+        .tab-sub-list ul {
+            padding-left: 20px;
+            font-size: 0.8rem;
+            color: #333;
+            line-height: 1.5;
         }
 
         .info-table {
@@ -227,16 +298,12 @@
             font-size: 1.05rem;
             color: #2c3e50;
             margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .idea-card p {
             font-size: 0.85rem;
             color: #555;
             line-height: 1.5;
-            margin-bottom: 10px;
         }
 
         .external-links {
@@ -256,7 +323,45 @@
             font-size: 0.8rem;
             border-radius: 6px;
             border: 1px solid #ccc;
+            transition: background-color 0.2s;
         }
+
+        .link-btn:hover {
+            background-color: #dcdde1;
+        }
+
+        .social-section {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+            text-align: center;
+        }
+
+        .social-section p {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .btn-insta { background-color: #e1306c; }
+        .btn-fb { background-color: #3b5998; }
+        .btn-info { background-color: #34495e; }
 
         footer {
             background-color: #f8f9fa;
@@ -273,18 +378,52 @@
         <header>
             <h1>황태준 홈페이지</h1>
             
-            <!-- 외부 무료 샘플 음원(잔잔한 피아노/클래식) 직접 연결 -->
             <audio id="bgm" src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" loop></audio>
             <div class="bgm-container">
                 <button id="bgmBtn" class="bgm-btn" onclick="toggleBGM()">🎵 BGM 재생</button>
             </div>
 
             <nav>
-                <button class="nav-btn active" onclick="switchPage('mintro')">자기소개</button>
-                <button class="nav-btn" onclick="switchPage('minfo')">인적사항</button>
-                <button class="nav-btn" onclick="switchPage('mstudy')">학술사항</button>
-                <button class="nav-btn" onclick="switchPage('mcareer')">경력사항</button>
-                <button class="nav-btn" onclick="switchPage('midea')">아이디어</button>
+                <div class="nav-item">
+                    <button class="nav-btn active" onclick="switchPage('mintro')">자기소개</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" onclick="switchPage('mintro')">a. 프로필 요약</a>
+                        <a class="dropdown-item" onclick="switchPage('mintro')">b. 소개 말</a>
+                        <a class="dropdown-item" onclick="switchPage('mintro')">c. 외부 링크</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <button class="nav-btn" onclick="switchPage('minfo')">인적사항</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" onclick="switchPage('minfo')">a. 기본 정보</a>
+                        <a class="dropdown-item" onclick="switchPage('minfo')">b. 기술 스택</a>
+                        <a class="dropdown-item" onclick="switchPage('minfo')">c. 관심 분야</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <button class="nav-btn" onclick="switchPage('mstudy')">학술사항</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" onclick="switchPage('mstudy')">a. 캡스톤 디자인</a>
+                        <a class="dropdown-item" onclick="switchPage('mstudy')">b. 스마트 팜</a>
+                        <a class="dropdown-item" onclick="switchPage('mstudy')">c. 웹 프로젝트</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <button class="nav-btn" onclick="switchPage('mcareer')">경력사항</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" onclick="switchPage('mcareer')">a. 팀 리더 경력</a>
+                        <a class="dropdown-item" onclick="switchPage('mcareer')">b. Kaggle 활동</a>
+                        <a class="dropdown-item" onclick="switchPage('mcareer')">c. 대외 활동</a>
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <button class="nav-btn" onclick="switchPage('midea')">아이디어</button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" onclick="switchPage('midea')">a. 영화 흥행 예측</a>
+                        <a class="dropdown-item" onclick="switchPage('midea')">b. 좌석 추천 서비스</a>
+                        <a class="dropdown-item" onclick="switchPage('midea')">c. 영화 즐겨찾기</a>
+                    </div>
+                </div>
             </nav>
         </header>
 
@@ -302,6 +441,15 @@
                 <div class="intro-text">
                     안녕하세요. 풀스택 웹 및 임베디드 시스템 개발에 관심이 많은 황태준입니다.<br><br>
                     백엔드(Java, Spring Boot)부터 프론트엔드, 그리고 임베디드(Arduino) 기반 IoT 시스템까지 다양한 분야에서 실무 감각과 문제 해결 능력을 키워가고 있습니다.
+                </div>
+
+                <div class="tab-sub-list">
+                    <h4>📋 자기소개 주요 요약 목록</h4>
+                    <ul>
+                        <li>풀스택 웹 애플리케이션 개발 역량 보유</li>
+                        <li>임베디드 및 IoT 스마트 프로토타입 구현 경험</li>
+                        <li>지속적인 학습 및 문제 해결 마인드셋</li>
+                    </ul>
                 </div>
 
                 <div class="external-links">
@@ -335,6 +483,15 @@
                         <td>웹 애플리케이션 개발, IoT 스마트 시스템</td>
                     </tr>
                 </table>
+
+                <div class="tab-sub-list">
+                    <h4>📋 인적사항 세부 목록</h4>
+                    <ul>
+                        <li>소속 대학: 컴퓨터공학전공</li>
+                        <li>주요 역량: Java & 웹 프레임워크 기반 설계</li>
+                        <li>활동 상태: 학업 및 프로젝트 병행 중</li>
+                    </ul>
+                </div>
             </section>
 
             <section id="mstudy" class="page">
@@ -355,6 +512,15 @@
                         <div class="timeline-desc">Spring MVC 기반 비즈니스 카드 및 도서 관리 시스템 구축</div>
                     </div>
                 </div>
+
+                <div class="tab-sub-list">
+                    <h4>📋 학술/프로젝트 목록</h4>
+                    <ul>
+                        <li>스마트 미래 여행플래너 (캡스톤)</li>
+                        <li>아두이노 스마트 팜 자동화 시스템</li>
+                        <li>Spring MVC 비즈니스 카드 및 도서 관리 웹 시스템</li>
+                    </ul>
+                </div>
             </section>
 
             <section id="mcareer" class="page">
@@ -369,6 +535,14 @@
                         <div class="timeline-title">데이터 분석 및 알고리즘 학습</div>
                         <div class="timeline-desc">Kaggle 머신러닝/데이터 분석 활동</div>
                     </div>
+                </div>
+
+                <div class="tab-sub-list">
+                    <h4>📋 경력 및 대외활동 목록</h4>
+                    <ul>
+                        <li>웹 개발 프로젝트 팀 리더 및 UI/UX 구조 설계</li>
+                        <li>Kaggle 데이터 분석 및 머신러닝 학습 활동</li>
+                    </ul>
                 </div>
             </section>
 
@@ -385,8 +559,27 @@
 
                 <div class="idea-card">
                     <h3>⭐ 커스텀 영화 정보 & 즐겨찾기 포털</h3>
+                    <p>사용자가 직접 즐겨찾는 영화 콘텐츠를 정리하고 관리하는 개인화 포털 서비스</p>
+                </div>
+
+                <div class="tab-sub-list">
+                    <h4>📋 아이디어 기획 목록</h4>
+                    <ul>
+                        <li>영화 데이터 통합 및 흥행 예측 플랫폼 기획</li>
+                        <li>맞춤형 영화관 좌석 추천 서비스 설계</li>
+                        <li>커스텀 영화 정보 & 즐겨찾기 포털 구상</li>
+                    </ul>
                 </div>
             </section>
+
+            <div class="social-section">
+                <p>🔗 20221031 황태준 채널 바로가기</p>
+                <div class="social-links">
+                    <a href="https://www.instagram.com" target="_blank" class="social-btn btn-insta">Instagram</a>
+                    <a href="https://www.facebook.com" target="_blank" class="social-btn btn-fb">Facebook</a>
+                    <a href="#mintro" onclick="switchPage('mintro')" class="social-btn btn-info">20221031 황태준</a>
+                </div>
+            </div>
         </main>
 
         <footer>
